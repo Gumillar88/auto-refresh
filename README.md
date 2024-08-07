@@ -16,3 +16,24 @@ You can install this library using Composer by running the following command:
 
 ```bash
 composer require glw/auto-refresh
+
+Add the following JavaScript code to your HTML file to connect to the WebSocket server:
+
+<script>
+    let socket = new WebSocket("ws://localhost:8080");
+
+    socket.onmessage = function(event) {
+        if (event.data === 'reload') {
+            location.reload(); // Auto-refresh the browser
+        }
+    };
+</script>
+
+Run the Server
+
+Start the PHP WebSocket server with the following command:
+
+php examples/example.php
+
+Contact
+If you have any questions or issues, please contact gumilarlesmana@gmail.com
