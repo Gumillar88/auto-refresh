@@ -34,6 +34,3 @@ Run the Server
 Start the PHP WebSocket server with the following command:
 
 php examples/example.php
-
-Contact
-If you have any questions or issues, please contact gumilarlesmana@gmail.com
