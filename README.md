@@ -16,9 +16,9 @@ You can install this library using Composer by running the following command:
 
 ```bash
 composer require glw/auto-refresh
-
+```
 Add the following JavaScript code to your HTML file to connect to the WebSocket server:
-
+```js
 <script>
     let socket = new WebSocket("ws://localhost:8080");
 
@@ -28,9 +28,11 @@ Add the following JavaScript code to your HTML file to connect to the WebSocket 
         }
     };
 </script>
-
+```
 Run the Server
 
 Start the PHP WebSocket server with the following command:
 
+```bash
 php examples/example.php
+```
