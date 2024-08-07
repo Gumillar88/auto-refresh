@@ -4,28 +4,34 @@ namespace Glw\AutoRefresh;
 
 class FileWatcher
 {
-    private $files = [];
-    private $interval;
+    private $watchedFiles;
 
-    public function __construct(array $files, $interval = 1)
+    public function __construct(array $watchedFiles)
     {
-        $this->files = $files;
-        $this->interval = $interval;
+        $this->watchedFiles = $watchedFiles;
     }
 
     public function watch()
     {
-        $lastModified = array_map('filemtime', $this->files);
+        // Implement simple file watching using polling
+        $lastModifiedTimes = [];
 
         while (true) {
-            sleep($this->interval);
-            foreach ($this->files as $key => $file) {
-                if (file_exists($file) && filemtime($file) !== $lastModified[$key]) {
-                    $lastModified[$key] = filemtime($file);
-                    // Notify changes or trigger auto-refresh
-                    echo "File changed: $file\n";
+            foreach ($this->watchedFiles as $directory) {
+                $files = glob("$directory/*");
+                foreach ($files as $file) {
+                    if (is_file($file)) {
+                        $lastModified = filemtime($file);
+                        if (!isset($lastModifiedTimes[$file])) {
+                            $lastModifiedTimes[$file] = $lastModified;
+                        } elseif ($lastModifiedTimes[$file] != $lastModified) {
+                            $lastModifiedTimes[$file] = $lastModified;
+                            return true; // File changed
+                        }
+                    }
                 }
             }
+            sleep(1); // Polling interval
         }
     }
 }

@@ -2,44 +2,43 @@
 
 namespace Glw\AutoRefresh;
 
-use Ratchet\MessageComponentInterface;
-use Ratchet\ConnectionInterface;
-
-class WebSocketServer implements MessageComponentInterface
+class WebSocketServer
 {
-    protected $clients;
-    protected $watchedFiles;
+    private $watchedFiles;
 
     public function __construct(array $watchedFiles)
     {
-        $this->clients = new \SplObjectStorage;
         $this->watchedFiles = $watchedFiles;
     }
 
-    public function onOpen(ConnectionInterface $conn) 
+    public function start()
     {
-        $this->clients->attach($conn);
-        echo "New connection: {$conn->resourceId}\n";
-    }
+        $address = '127.0.0.1';
+        $port = 8080;
 
-    public function onMessage(ConnectionInterface $from, $msg) 
-    {
-        foreach ($this->clients as $client) {
-            if ($from !== $client) {
-                $client->send($msg);
-            }
+        $server = stream_socket_server("tcp://$address:$port", $errno, $errorMessage);
+
+        if (!$server) {
+            die("Error: $errorMessage");
         }
-    }
 
-    public function onClose(ConnectionInterface $conn) 
-    {
-        $this->clients->detach($conn);
-        echo "Connection closed: {$conn->resourceId}\n";
-    }
+        echo "Server started on $address:$port\n";
 
-    public function onError(ConnectionInterface $conn, \Exception $e) 
-    {
-        echo "Error: {$e->getMessage()}\n";
-        $conn->close();
+        $fileWatcher = new FileWatcher($this->watchedFiles);
+
+        while ($client = stream_socket_accept($server)) {
+            echo "Client connected\n";
+
+            // Start watching files
+            while (!$fileWatcher->watch()) {
+                // Wait for file changes
+            }
+
+            echo "File changed, sending refresh signal\n";
+            fwrite($client, "reload");
+            fclose($client);
+        }
+
+        fclose($server);
     }
 }
