@@ -9,5 +9,6 @@
     },
     "require": {
         "cboden/ratchet": "^0.4.3"
-    }
+    },
+    "license": "MIT"
 }
