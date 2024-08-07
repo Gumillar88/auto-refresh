@@ -1,0 +1,13 @@
+{
+    "name": "glw/auto-refresh",
+    "description": "A PHP library for auto-refreshing the browser using WebSocket.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Glw\\AutoRefresh\\": "src/"
+        }
+    },
+    "require": {
+        "cboden/ratchet": "^0.4.3"
+    }
+}
