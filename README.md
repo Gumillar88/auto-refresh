@@ -52,10 +52,10 @@ a. Create Artisan Command
 Run the following command to create an Artisan command:
 
 ```bash
-php artisan make:command AutoRefreshServer
+php artisan make:command AutoRefreshServerSide
 ```
 b. Edit Artisan Command
-Open the newly created command file at app/Console/Commands/AutoRefreshServer.php and edit it as follows:
+Open the newly created command file at app/Console/Commands/AutoRefreshServerSide.php and edit it as follows:
 
 ```php
 <?php
@@ -65,7 +65,7 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use Glw\AutoRefresh\AutoRefreshServer;
 
-class AutoRefreshServer extends Command
+class AutoRefreshServerSide extends Command
 {
     protected $signature = 'auto-refresh:serve';
     protected $description = 'Start the Auto-Refresh WebSocket server';
